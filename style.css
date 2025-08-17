@@ -1,0 +1,357 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+#game-container {
+    width: 100%;
+    max-width: 400px;
+    height: 100vh;
+    max-height: 800px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+}
+
+.screen.active {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.content {
+    text-align: center;
+    width: 100%;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #4a5568;
+    margin-bottom: 2rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.description {
+    margin-bottom: 2rem;
+    line-height: 1.8;
+}
+
+.description p {
+    font-size: 1.1rem;
+    color: #2d3748;
+    margin-bottom: 0.5rem;
+}
+
+.ready-text {
+    font-size: 1.2rem;
+    color: #4a5568;
+    margin-bottom: 2rem;
+    font-weight: 500;
+}
+
+.btn {
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    min-width: 150px;
+}
+
+.btn.primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(102, 126, 234, 0.4);
+}
+
+.btn:not(.primary) {
+    background: #e2e8f0;
+    color: #4a5568;
+    margin-top: 1rem;
+}
+
+.btn:not(.primary):hover {
+    background: #cbd5e0;
+    transform: translateY(-1px);
+}
+
+/* 게임 화면 스타일 */
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 0 20px;
+}
+
+.score {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.timer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.timer-bar {
+    width: 120px;
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.timer-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #48bb78, #38a169);
+    width: 100%;
+    transition: width 0.1s linear;
+}
+
+.timer-text {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.question-container {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.question-text {
+    font-size: 1.3rem;
+    color: #2d3748;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    padding: 0 20px;
+    font-weight: 500;
+}
+
+.input-container {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+#answer-input {
+    padding: 15px 20px;
+    font-size: 1.1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 25px;
+    width: 200px;
+    text-align: center;
+    transition: border-color 0.3s ease;
+}
+
+#answer-input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.result-message {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 20px;
+    border-radius: 15px;
+    background: #f7fafc;
+    border: 2px solid #e2e8f0;
+}
+
+.result-message.hidden {
+    display: none;
+}
+
+#result-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #2d3748;
+}
+
+.full-verse {
+    font-size: 1rem;
+    color: #4a5568;
+    line-height: 1.6;
+    font-style: italic;
+}
+
+.flying-image {
+    position: absolute;
+    top: 50%;
+    left: -100px;
+    transform: translateY(-50%);
+    z-index: 1000;
+}
+
+.flying-image.hidden {
+    display: none;
+}
+
+.flying-image img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+
+.flying-image.fly {
+    animation: flyRight 4s ease-in-out forwards;
+}
+
+@keyframes flyRight {
+    0% {
+        left: -100px;
+        transform: translateY(-50%) rotate(0deg);
+    }
+    100% {
+        left: 100%;
+        transform: translateY(-50%) rotate(360deg);
+    }
+}
+
+/* 결과 화면 스타일 */
+.final-message {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 2rem;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.certificate {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 2rem;
+    text-align: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    border-radius: 15px;
+    border: 3px solid #667eea;
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 480px) {
+    #game-container {
+        border-radius: 0;
+        max-height: 100vh;
+    }
+    
+    .title {
+        font-size: 2rem;
+    }
+    
+    .question-text {
+        font-size: 1.1rem;
+    }
+    
+    #answer-input {
+        width: 150px;
+        font-size: 1rem;
+    }
+}
+
+/* 애니메이션 효과 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.screen.active {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+/* 축포 애니메이션 */
+@keyframes confetti {
+    0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #f56565;
+    animation: confetti 3s ease-in-out forwards;
+}
+
+.confetti:nth-child(2n) {
+    background: #48bb78;
+    animation-duration: 2.5s;
+}
+
+.confetti:nth-child(3n) {
+    background: #4299e1;
+    animation-duration: 3.5s;
+}
+
+.confetti:nth-child(4n) {
+    background: #ed8936;
+    animation-duration: 2.8s;
+}
